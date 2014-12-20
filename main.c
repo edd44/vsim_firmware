@@ -2,27 +2,26 @@
 #include <util/delay.h>
 #include "mklib_usart/mklib_usart.h"
 
-#define T_ON OCR1A
+#define PWM_T_ON_US OCR1A
+#define PWM_PERIOD_US ICR1
 
 const int cycle_time_us = 20000;
 
 int main()
 {
 	USART_stdout_redirect();
-	USART_init(9600, 0, 1, 0, 0);
-	printf("dzindybry!");
+	USART_init(19200, 1, 1, 0, 0);
+	printf("\nHello there my little fellow!\n");
+
 	DDRD |= 0xFF;
 	TCCR1A |= 1<<WGM11 | 1<<COM1A1 ;
 	TCCR1B |= 1<<WGM13 | 1<<WGM12 | 1<<CS11;
-	ICR1 = cycle_time_us;
+	PWM_PERIOD_US = cycle_time_us;
 
-	int i = 2000;
+	uint8_t i = 70;
 	while (1)
 		{
-			T_ON = i;
-			printf("%d\n",i);
-			i>=2300 ? i=500 : i++;
-			//_delay_ms(1);
+			PWM_T_ON_US = USART_getchar2()*10;
 		}
 
 	return 0;
