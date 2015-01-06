@@ -1,6 +1,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "mklib_usart/mklib_usart.h"
+#include "receiver.h"
 
 #define PWM_T_ON_US OCR1A
 #define PWM_PERIOD_US ICR1
@@ -21,6 +22,7 @@ int main()
 	uint8_t i = 70;
 	while (1)
 		{
+			receive(0);
 			PWM_T_ON_US = USART_getchar()*10;
 		}
 
