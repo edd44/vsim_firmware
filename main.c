@@ -10,7 +10,7 @@ const int cycle_time_us = 20000;
 int main()
 {
 	USART_stdout_redirect();
-	USART_init(19200, 1, 1, 0, 0);
+	USART_init(19200, RX_ENABLE, TX_ENABLE, RX_INT_DISABLE, TX_INT_DISABLE);
 	printf("\nHello there my little fellow!\n");
 
 	DDRD |= 0xFF;
