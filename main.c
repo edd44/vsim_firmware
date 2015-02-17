@@ -22,8 +22,8 @@ int main()
 	uint8_t i = 70;
 	while (1)
 		{
-			receive(0);
-			PWM_T_ON_US = USART_getchar()*10;
+			receive(USART_getchar());
+			//PWM_T_ON_US = USART_getchar()*10;
 		}
 
 	return 0;
