@@ -22,8 +22,16 @@ int main()
 	uint8_t i = 70;
 	while (1)
 		{
-			receive(USART_getchar());
-			//PWM_T_ON_US = USART_getchar()*10;
+			struct actors_settings_t settings = receive(USART_getchar());
+			if (settings.valid)
+			{
+				for (uint8_t i=0; i<SERVOS_COUNT; i++)
+					{
+						printf("Servo #%d: %d\n", i, settings.value[i]);
+					}
+				//TO DO: create an interface for setting servos value
+				PWM_T_ON_US = settings.value[0]*10;
+			}
 		}
 
 	return 0;

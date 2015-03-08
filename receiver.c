@@ -13,12 +13,21 @@ static uint8_t position;
 |  0  |    1   |      2     |     3      |      4     |     5    |  6 |
 */
 
+uint8_t digit_to_int(uint8_t digit)
+{
+	return (digit-'0');
+}
+
+uint8_t digits_to_int(uint8_t hundreds, uint8_t tens, uint8_t units)
+{
+	return (hundreds*100+tens*10+units);
+}
 
 void print_buffer()
 {
 	for (uint8_t i = 0; i<7; i++)
 		{
-			printf("%c\n", buffer[i]);
+			printf("%c", buffer[i]);
 		}
 }
 
@@ -30,7 +39,7 @@ void error()
 struct actors_settings_t receive(uint8_t _byte)
 {
 	actors_settings.valid = 0;
-	
+
 	switch (_byte)
 	{
 		case '/':
@@ -40,7 +49,12 @@ struct actors_settings_t receive(uint8_t _byte)
 			break;
 		case '\\':
 			buffer[position] = _byte;
-			print_buffer();
+			//TO DO: add checksum verification
+			//print_buffer();
+			//printf("%d", digits_to_int(digit_to_int(buffer[2]), digit_to_int(buffer[3]), digit_to_int(buffer[4])));
+			//verify checksum, if valid then
+			actors_settings.valid = 1;
+			actors_settings.value[digit_to_int(buffer[1])] = digits_to_int(digit_to_int(buffer[2]), digit_to_int(buffer[3]), digit_to_int(buffer[4]));
 			break;
 		default:
 			buffer[position] = _byte;
@@ -50,4 +64,3 @@ struct actors_settings_t receive(uint8_t _byte)
 
 	return actors_settings;
 }
-
