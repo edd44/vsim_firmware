@@ -33,7 +33,7 @@ void print_buffer()
 
 void error()
 {
-	printf("error\n");
+	//printf("error\n");
 }
 
 struct actors_settings_t receive(uint8_t _byte)
