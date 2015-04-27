@@ -27,7 +27,7 @@ void print_buffer()
 {
 	for (uint8_t i = 0; i<7; i++)
 		{
-			printf("%c", buffer[i]);
+			//printf("%c", buffer[i]);
 		}
 }
 
@@ -49,12 +49,16 @@ struct actors_settings_t receive(uint8_t _byte)
 			break;
 		case '\\':
 			buffer[position] = _byte;
-			//TO DO: add checksum verification
-			//print_buffer();
-			//printf("%d", digits_to_int(digit_to_int(buffer[2]), digit_to_int(buffer[3]), digit_to_int(buffer[4])));
-			//verify checksum, if valid then
-			actors_settings.valid = 1;
-			actors_settings.value[digit_to_int(buffer[1])] = digits_to_int(digit_to_int(buffer[2]), digit_to_int(buffer[3]), digit_to_int(buffer[4]));
+			if (checksum_valid(buffer) == true)
+			{
+				actors_settings.valid = 1;
+				actors_settings.value[digit_to_int(buffer[1])] = digits_to_int(digit_to_int(buffer[2]), digit_to_int(buffer[3]), digit_to_int(buffer[4]));
+			}
+			else
+			{
+				actors_settings.valid = 0;
+				error();
+			}
 			break;
 		default:
 			buffer[position] = _byte;
@@ -63,4 +67,11 @@ struct actors_settings_t receive(uint8_t _byte)
 	}
 
 	return actors_settings;
+}
+
+bool checksum_valid(uint8_t *buffer)
+{
+	//TO DO: replace magic number with defined consts, eg. buffer[CHECKSUM]
+	uint8_t calculated_checksum = (digit_to_int(buffer[1]) + digit_to_int(buffer[2]) + digit_to_int(buffer[3]) + digit_to_int(buffer[4])) % 10;
+	return calculated_checksum == digit_to_int(buffer[5]);
 }

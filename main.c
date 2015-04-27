@@ -39,7 +39,6 @@ int main()
 {
 	USART_stdout_redirect();
 	USART_init(19200, RX_ENABLE, TX_DISABLE, RX_INT_DISABLE, TX_INT_DISABLE);
-	//printf("\nHello there my little fellow!\n");
 
 	config_timer();
 	set_servo(0, 150);
@@ -50,10 +49,6 @@ int main()
 			struct actors_settings_t settings = receive(USART_getchar());
 			if (settings.valid)
 			{
-				// for (uint8_t i=0; i<SERVOS_COUNT; i++)
-				// 	{
-				// 		printf("Servo #%d: %d\n", i, settings.value[i]);
-				// 	}
 				set_servo(1, settings.value[1]);
 				set_servo(0, settings.value[0]);
 			}
